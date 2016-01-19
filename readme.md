@@ -11,3 +11,7 @@ On the far right click "Add Content Root"
 Move to your files you uncompressed
 add /lib/ev3/
 Main should no longer show as an error
+
+Pulled from:
+http://www.rapidpm.org/2013/12/27/developing-lejos-programs-with-intelli.html
+However the site is out of date, but the jist is still there
