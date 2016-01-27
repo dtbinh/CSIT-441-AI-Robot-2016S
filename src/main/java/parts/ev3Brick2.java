@@ -9,6 +9,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 /**
+ * Assuming the second brick is the club brick
+ *
  * Brick 1 = 192.168.0.10
  * Brick 2 = 192.168.0.11
  */
@@ -16,11 +18,16 @@ public class ev3Brick2 {
 
     RemoteEV3 ev3;
 
+    private RMIRegulatedMotor motorA;
+    private RMIRegulatedMotor motorB;
+    private RMIRegulatedMotor motorC;
+
     private LED led;
 
     public boolean connectToMasterBrick() {
         try {
-            ev3 = new RemoteEV3("192.168.43.18");
+            //Remote IP address of the secondary brick
+            ev3 = new RemoteEV3("192.168.0.11");
         } catch (RemoteException e) {
 
         } catch (MalformedURLException e) {
@@ -30,6 +37,10 @@ public class ev3Brick2 {
         }
 
         led = ev3.getLED();
+
+        motorA = ev3.createRegulatedMotor("A", 'L');
+        motorB = ev3.createRegulatedMotor("B", 'L');
+        motorC = ev3.createRegulatedMotor("C", 'L');
 
         return true;
     }
