@@ -48,7 +48,7 @@ public class EV3RemoteBrick {
         return true;
     }
 
-    private void helloWorld() {
+    public void helloWorld() {
         // Quick indicator that the brains are talking
         led.setPattern(1);
     }

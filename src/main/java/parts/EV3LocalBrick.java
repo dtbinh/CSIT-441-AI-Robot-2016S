@@ -23,13 +23,17 @@ public class EV3LocalBrick {
 
     }
 
-    private void printReady() {
+    public void printReady() {
         LCD.clear();
         Button.LEDPattern(4);
         LCD.drawString("Ready", 0, 5);
         Button.waitForAnyPress();
         LCD.clear();
         LCD.refresh();
+    }
+
+    public void helloWorld() {
+        Button.LEDPattern(1);
     }
 
 }

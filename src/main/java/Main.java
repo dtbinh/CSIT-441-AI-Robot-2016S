@@ -28,6 +28,9 @@ public class Main {
      * Basic hello world to test the deploy functionality is working properly
      */
     private static void helloWorld() {
+        localEV3.helloWorld();
+        remoteEV3.helloWorld();
+
         LCD.clear();
         LCD.drawString("First EV3 Program", 0, 5);
         Button.waitForAnyPress();
