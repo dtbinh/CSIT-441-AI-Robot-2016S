@@ -18,12 +18,19 @@ However the site is out of date, but the jist is still there
 
 # Deploying code
 Move to your gradle options on the right of IntelliJ
+
 Expand the *build* folder
+
 Run the *clean* command
+
 Run the *build* command
+
 You may see errors, but if it completes it should be fine for the time being
+
 Expand the *other* folder
+
 Run the *deployEV3* to push the code to the EV3
+
 ** Remember to be connect to House Stark for this step **
 
 If these options are not available, try clicking the plus symbol at the top of the gradle projects tab and add the *build.gradle* file from the local code base.
