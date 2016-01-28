@@ -20,6 +20,8 @@ Add the base leJOS folder and IntelliJ should find the source code for *dbusjava
 Inside the class *Main*, errors should no longer show
 
 ## Sites referenced, if you are having problems these may help:
+http://www.lejos.org/
+
 http://www.rapidpm.org/2013/12/27/developing-lejos-programs-with-intelli.html
 
 https://github.com/jornfranke/lejos-ev3-example
