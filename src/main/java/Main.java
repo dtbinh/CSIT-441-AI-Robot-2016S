@@ -11,9 +11,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-//        helloWorld();
-
-        setup();
+        helloWorld();
     }
 
     private static void setup() {
