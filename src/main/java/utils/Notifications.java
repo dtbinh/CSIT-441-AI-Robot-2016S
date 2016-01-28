@@ -43,4 +43,11 @@ public class Notifications {
         Button.LEDPattern(5);
         Sound.buzz();
     }
+
+    /**
+     * Clears the color/pattern of the button LED
+     */
+    public static void clearStatusColor() {
+        Button.LEDPattern(0);
+    }
 }

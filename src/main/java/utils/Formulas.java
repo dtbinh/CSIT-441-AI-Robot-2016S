@@ -1,3 +1,5 @@
+package utils;
+
 public class Formulas {
 
     public static double distance(int x1, int x2, int y1, int y2) {

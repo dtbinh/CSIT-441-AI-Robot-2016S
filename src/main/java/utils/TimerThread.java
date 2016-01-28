@@ -1,3 +1,5 @@
+package utils;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -6,7 +8,7 @@ public class TimerThread extends Thread {
     private int timerTime;
 
     /**
-     * Default constructor for TimerThread
+     * Default constructor for utils.TimerThread
      * Sets the default time for the alarm at 2 minutes
      */
     public TimerThread() {
