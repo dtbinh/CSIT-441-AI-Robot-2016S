@@ -1,5 +1,4 @@
-Download this
-http://sourceforge.net/projects/ev3.lejos.p/files/0.9.1-beta/leJOS_EV3_0.9.1-beta.tar.gz/download
+Download [version 9.1 of leJOS] (http://sourceforge.net/projects/ev3.lejos.p/files/0.9.1-beta/leJOS_EV3_0.9.1-beta.tar.gz/download)
 
 Place the extracted file in a folder to hold long term
 I use $USER\bin\ but where ever you prefer will work
@@ -12,9 +11,9 @@ Move to your files you uncompressed
 add /lib/ev3/
 Main should no longer show as an error
 
-# Pulled from:
+# Sites referenced, if you are having problems these may help:
 http://www.rapidpm.org/2013/12/27/developing-lejos-programs-with-intelli.html
-However the site is out of date, but the jist is still there
+
 
 # Deploying code
 Move to your gradle options on the right of IntelliJ
