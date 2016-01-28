@@ -27,6 +27,7 @@ http://www.rapidpm.org/2013/12/27/developing-lejos-programs-with-intelli.html
 https://github.com/jornfranke/lejos-ev3-example
 
 # Deploying code:
+### Hold off on this for now, I have it setup on my Mac, and I want to make sure I know how to do it on Windows
 Move to your gradle options on the right of IntelliJ
 
 Expand the *build* folder
