@@ -16,7 +16,7 @@ import java.rmi.RemoteException;
  * Brick 1 = 192.168.0.10
  * Brick 2 = 192.168.0.11
  */
-public class EV3Brick2 {
+public class EV3RemoteBrick {
 
     RemoteEV3 ev3;
 
@@ -26,7 +26,7 @@ public class EV3Brick2 {
 
     private LED led;
 
-    public EV3Brick2() {
+    public EV3RemoteBrick() {
         //Setup connection
         connectToMasterBrick();
     }

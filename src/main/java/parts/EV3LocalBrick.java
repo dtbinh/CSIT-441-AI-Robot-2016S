@@ -7,9 +7,9 @@ import lejos.hardware.lcd.LCD;
  * Brick 1 = 192.168.0.10
  * Brick 2 = 192.168.0.11
  */
-public class EV3Brick1 {
+public class EV3LocalBrick {
 
-    public EV3Brick1() {
+    public EV3LocalBrick() {
         helloWorld();
     }
 
