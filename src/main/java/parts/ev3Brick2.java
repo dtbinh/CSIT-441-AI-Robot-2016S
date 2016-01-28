@@ -1,6 +1,8 @@
 package parts;
 
+import lejos.hardware.Button;
 import lejos.hardware.LED;
+import lejos.hardware.lcd.LCD;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RemoteEV3;
 
@@ -53,5 +55,9 @@ public class EV3Brick2 {
         motorC = ev3.createRegulatedMotor("C", 'L');
 
         return true;
+    }
+
+    private void helloWorld() {
+        led.setPattern(1);
     }
 }
