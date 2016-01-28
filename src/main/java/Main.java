@@ -1,13 +1,13 @@
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
-import parts.EV3Brick1;
-import parts.EV3Brick2;
+import parts.EV3LocalBrick;
+import parts.EV3RemoteBrick;
 import utils.Notifications;
 
 public class Main {
 
-    private static EV3Brick1 localEV3;
-    private static EV3Brick2 remoteEV3;
+    private static EV3LocalBrick localEV3;
+    private static EV3RemoteBrick remoteEV3;
 
     /**
      * Main
@@ -33,7 +33,7 @@ public class Main {
     }
 
     private static void helloWorld() {
-        localEV3 = new EV3Brick1();
-        remoteEV3 = new EV3Brick2();
+        localEV3 = new EV3LocalBrick();
+        remoteEV3 = new EV3RemoteBrick();
     }
 }
