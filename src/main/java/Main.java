@@ -9,31 +9,29 @@ public class Main {
     private static EV3LocalBrick localEV3;
     private static EV3RemoteBrick remoteEV3;
 
-    /**
-     * Main
-     * Start of program
-     * @param args
-     */
+
     public static void main(String[] args) {
-        //Check that the bricks are working
+//        helloWorld();
+
+        setup();
+    }
+
+    private static void setup() {
+        localEV3 = new EV3LocalBrick();
+        remoteEV3 = new EV3RemoteBrick();
+
+        //Testing the ready functionality
+        Notifications.ready();
+    }
+
+    /**
+     * Basic hello world to test the deploy functionality is working properly
+     */
+    private static void helloWorld() {
         LCD.clear();
         LCD.drawString("First EV3 Program", 0, 5);
         Button.waitForAnyPress();
         LCD.clear();
         LCD.refresh();
-
-        setup();
-
-        helloWorld();
-    }
-
-    private static void setup() {
-        //Testing the ready functionality
-        Notifications.ready();
-    }
-
-    private static void helloWorld() {
-        localEV3 = new EV3LocalBrick();
-        remoteEV3 = new EV3RemoteBrick();
     }
 }
