@@ -31,7 +31,7 @@ Expand the *other* folder
 
 Run the *deployEV3* to push the code to the EV3
 
-**Remember to be connect to House Stark for this step**
+**Remember to be connect to the wireless AP *House Stark* for this step**
 
 If these options are not available, try clicking the plus symbol at the top of the gradle projects tab and add the *build.gradle* file from the local code base.
 
