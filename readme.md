@@ -37,9 +37,9 @@ If these options are not available, try clicking the plus symbol at the top of t
 
 
 # Tentative plan:
-[x] Push code via gradle
-[ ] Brains talking
-[ ] Robot movement
-[ ] Basic sensing
-[ ] Omni pilot moves
-[ ] Omni pilot moves based on sensors
+- [x] Push code via gradle
+- [ ] Brains talking
+- [ ] Robot movement
+- [ ] Basic sensing
+- [ ] Omni pilot moves
+- [ ] Omni pilot moves based on sensors
