@@ -2,6 +2,7 @@ package parts;
 
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.motor.Motor;
 
 /**
  * Brick 1 = 192.168.0.10
@@ -34,6 +35,18 @@ public class EV3LocalBrick {
 
     public void helloWorld() {
         Button.LEDPattern(1);
+
+        Motor.A.setSpeed(Motor.A.getMaxSpeed());
+        Motor.B.setSpeed(Motor.A.getMaxSpeed());
+        Motor.C.setSpeed(Motor.A.getMaxSpeed());
+
+        Motor.A.forward();
+        Motor.B.forward();
+        Motor.C.forward();
+    }
+
+    public void cleanExit() {
+        Button.LEDPattern(0);
     }
 
 }

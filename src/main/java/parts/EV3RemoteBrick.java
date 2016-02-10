@@ -44,6 +44,8 @@ public class EV3RemoteBrick {
 
         }
 
+        led = ev3.getLED();
+
         // Returns true if the block completes successfully
         return true;
     }
@@ -51,5 +53,9 @@ public class EV3RemoteBrick {
     public void helloWorld() {
         // Quick indicator that the brains are talking
         led.setPattern(1);
+    }
+
+    public void cleanExit() {
+        led.setPattern(0);
     }
 }
