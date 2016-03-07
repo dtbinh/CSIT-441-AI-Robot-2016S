@@ -41,7 +41,7 @@ sourceSets {
 repositories {
     mavenCentral()
     flatDir {
-        dirs  '/Users/michael/bin/leJOS_EV3_0.9.1-beta' + '/lib/ev3'
+        dirs  System.getenv('EV3_HOME')+'/lib/ev3'
     }
 }
 
