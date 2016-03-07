@@ -1,10 +1,11 @@
 group 'edu.unk'
 version '1.0-SNAPSHOT'
 
+import org.gradle.internal.os.OperatingSystem;
+
 apply plugin: 'java'
 apply plugin: 'application'
-
-import org.gradle.internal.os.OperatingSystem;
+apply plugin: 'org.hidetake.ssh'
 
 sourceCompatibility = 1.7
 version = '1.0'
@@ -28,11 +29,23 @@ buildscript {
     }
 }
 
-apply plugin: 'org.hidetake.ssh'
-
 configurations {
     sshAntTask
     provided
+}
+
+remotes {
+    ev3_1 {
+        host = '192.168.0.10'
+        user = 'root'
+        password = 'root'
+    }
+
+    ev3_2 {
+        host = '192.168.0.11'
+        user = 'root'
+        password = 'root'
+    }
 }
 
 sourceSets {
@@ -40,9 +53,10 @@ sourceSets {
     test.compileClasspath += configurations.provided
     test.runtimeClasspath += configurations.provided
 }
+
 repositories {
     mavenCentral()
-    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+    if (OperatingSystem.current().isWindows()) {
         flatDir {
             dirs System.getenv('EV3_HOME') + '/lib/ev3'
         }
@@ -58,15 +72,6 @@ dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     provided group: 'lejos', name: 'ev3classes', version: '1.0'
     testCompile group: 'junit', name: 'junit', version: '4.+'
-
-}
-
-dependencies {
-    sshAntTask 'org.apache.ant:ant-jsch:1.9.4', 'jsch:jsch:0.1.29'
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
-    provided group: 'lejos', name: 'ev3classes', version: '1.0'
-    testCompile group: 'junit', name: 'junit', version: '4.+'
-
 }
 
 test {
@@ -84,17 +89,9 @@ task deployEV3 << {
     }
 }
 
-remotes {
-    webServer {
-        host = '192.168.0.10'
-        user = 'root'
-        password = 'root'
-    }
-}
-
 task deployEV3Gradle << {
     ssh.run {
-        session(remotes.webServer) {
+        session(remotes.ev3_1) {
             put from: './build/libs', into: '/home/lejos/programs'
         }
     }
