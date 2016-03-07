@@ -4,6 +4,8 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'application'
 
+import org.gradle.internal.os.OperatingSystem;
+
 sourceCompatibility = 1.7
 version = '1.0'
 compileJava.options.encoding = 'UTF-8'
@@ -40,8 +42,14 @@ sourceSets {
 }
 repositories {
     mavenCentral()
-    flatDir {
-        dirs  System.getenv('EV3_HOME')+'/lib/ev3'
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        flatDir {
+            dirs System.getenv('EV3_HOME') + '/lib/ev3'
+        }
+    } else {
+        flatDir {
+            dirs '/Users/michael/bin/leJOS_EV3_0.9.1-beta' + '/lib/ev3'
+        }
     }
 }
 
