@@ -17,6 +17,17 @@ jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:1.4.0'
+    }
+}
+
+apply plugin: 'org.hidetake.ssh'
+
 configurations {
     sshAntTask
     provided
@@ -33,7 +44,6 @@ repositories {
         dirs  System.getenv('EV3_HOME')+'/lib/ev3'
     }
 }
-
 
 dependencies {
     sshAntTask 'org.apache.ant:ant-jsch:1.9.4', 'jsch:jsch:0.1.29'
@@ -62,6 +72,22 @@ task deployEV3 << {
             verbose: 'true') {
         fileset(dir: './build/libs') {
             include(name: '**/*.jar')
+        }
+    }
+}
+
+remotes {
+    webServer {
+        host = '192.168.0.10'
+        user = 'root'
+        password = 'root'
+    }
+}
+
+task deployEV3Gradle << {
+    ssh.run {
+        session(remotes.webServer) {
+            put from: './build/libs', into: '/home/lejos/programs'
         }
     }
 }

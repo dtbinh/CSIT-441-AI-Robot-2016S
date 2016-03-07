@@ -6,15 +6,21 @@ import utils.Notifications;
 
 public class Main {
 
-    private static EV3LocalBrick localEV3;
-    private static EV3RemoteBrick remoteEV3;
+    private  EV3LocalBrick localEV3;
+    private  EV3RemoteBrick remoteEV3;
 
 
     public static void main(String[] args) {
-        helloWorld();
+        new Main();
     }
 
-    private static void setup() {
+    public Main() {
+        setup();
+        helloWorld();
+        cleanExit();
+    }
+
+    private void setup() {
         localEV3 = new EV3LocalBrick();
         remoteEV3 = new EV3RemoteBrick();
 
@@ -25,7 +31,7 @@ public class Main {
     /**
      * Basic hello world to test the deploy functionality is working properly
      */
-    private static void helloWorld() {
+    private void helloWorld() {
         localEV3.helloWorld();
         remoteEV3.helloWorld();
 
@@ -34,5 +40,10 @@ public class Main {
         Button.waitForAnyPress();
         LCD.clear();
         LCD.refresh();
+    }
+
+    private void cleanExit() {
+        localEV3.cleanExit();
+        remoteEV3.cleanExit();
     }
 }
