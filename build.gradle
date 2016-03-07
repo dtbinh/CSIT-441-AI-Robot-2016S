@@ -92,7 +92,7 @@ test {
 task deployEV3Gradle << {
     ssh.run {
         session(remotes.ev3_1) {
-            put from: './build/libs', into: '/home/lejos/programs'
+            put from: './build/libs/*.jar', into: '/home/lejos/programs'
         }
     }
 }
