@@ -40,8 +40,14 @@ sourceSets {
 }
 repositories {
     mavenCentral()
-    flatDir {
-        dirs  System.getenv('EV3_HOME')+'/lib/ev3'
+    if (runningOnWindows) {
+        flatDir {
+            dirs System.getenv('EV3_HOME') + '/lib/ev3'
+        }
+    } else {
+        flatDir {
+            dirs 
+        }
     }
 }
 
