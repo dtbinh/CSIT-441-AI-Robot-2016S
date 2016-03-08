@@ -36,15 +36,19 @@ configurations {
 
 remotes {
     ev3_1 {
+        role = ev3
         host = '192.168.0.10'
         user = 'root'
-        password = 'root'
+//        password = 'root'
+        identity = file('keys/id_rsa')
     }
 
     ev3_2 {
+        role = ev3
         host = '192.168.0.11'
         user = 'root'
-        password = 'root'
+//        password = 'root'
+        identity = file('keys/id_rsa')
     }
 }
 
@@ -91,8 +95,10 @@ test {
 
 task deployEV3 << {
     ssh.run {
-        session(remotes.ev3_1) {
-            put from: 'build/libs/*.jar', into: '/home/lejos/programs/AI-Robot.jar'
+        session(remotes.ev3_2) {
+            execute 'touch /home/lejos/programs/AI-Robot-2016S-CSIT441-1.0.jar'
+//            execute 'rm /home/lejos/programs/AI-Robot-2016S-CSIT441-1.0.jar'
+            put from: 'build/libs/*.jar', into: '/home/lejos/programs/AI-Robot-2016S-CSIT441-1.0.jar'
         }
     }
 }
