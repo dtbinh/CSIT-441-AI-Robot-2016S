@@ -1,100 +1,41 @@
-group 'edu.unk'
-version '1.0-SNAPSHOT'
+// File: build.gradle
 
-import org.gradle.internal.os.OperatingSystem;
-
-apply plugin: 'java'
-apply plugin: 'application'
-apply plugin: 'org.hidetake.ssh'
-
-sourceCompatibility = 1.7
-version = '1.0'
-compileJava.options.encoding = 'UTF-8'
-mainClassName = 'Main'
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'Gradle Lego/Lejos Mindstorms EV3 Example Project', 'Implementation-Version': version, 'Main-Class': mainClassName
-    }
-    // note this builds one fat jar and it is not recommended for production use - just for illustration purpose
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'org.hidetake:gradle-ssh-plugin:1.4.0'
-    }
-}
-
+// We define a new configuration with the name 'sshAntTask'.
+// This configuration is used to define our dependencies.
 configurations {
     sshAntTask
-    provided
 }
 
-remotes {
-    ev3_1 {
-        role 'ev3'
-        host = '192.168.0.10'
-        user = 'root'
-        identity = file('keys/id_rsa')
-    }
-
-    ev3_2 {
-        role 'ev3'
-        host = '192.168.0.11'
-        user = 'root'
-        identity = file('keys/id_rsa')
-    }
-}
-
-sourceSets {
-    main.compileClasspath += configurations.provided
-    test.compileClasspath += configurations.provided
-    test.runtimeClasspath += configurations.provided
-}
-
+// Define the Maven central repository to look for the dependencies.
 repositories {
     mavenCentral()
-    if (OperatingSystem.current().isWindows()) {
-        flatDir {
-            dirs System.getenv('EV3_HOME') + '/lib/ev3'
-        }
-    } else {
-        flatDir {
-            dirs '/Users/michael/bin/leJOS_EV3_0.9.1-beta' + '/lib/ev3'
-        }
-    }
 }
 
+// Assign dependencies to the sshAntTask configuration.
 dependencies {
-    sshAntTask 'org.apache.ant:ant-jsch:1.9.4', 'jsch:jsch:0.1.29'
-    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
-    provided group: 'lejos', name: 'ev3classes', version: '1.0'
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    sshAntTask 'org.apache.ant:ant-jsch:1.7.1', 'jsch:jsch:0.1.29'
 }
 
-test {
-    systemProperties 'property': 'value'
-}
+// Sample task which uses the scp Ant optional task.
+task update {
+    description = 'Update files on remote server.'
 
-task deployEV3Ant << {
-    ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp', classpath: configurations.sshAntTask.asPath)
-    ant.scp(todir: ev3_username + '@' + ev3_server + ':/home/lejos/programs',
-            password: ev3_password,
+    // Get passphrase from user input.
+    def console = System.console()
+    def passphrase = 'root'
+
+    // Redefine scp Ant task, with the classpath property set to our newly defined
+    // sshAntTask configuration classpath.
+    ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+            classpath: configurations.sshAntTask.asPath)
+
+    // Invoke the scp Ant task. (Use gradle -i update to see the output of the Ant task.)
+    ant.scp(todir: 'root@192.168.0.10:/home/lejos/programs',
+            keyfile: 'keys/id_rsa',
+            passphrase: passphrase as String, // Use phassphrase entered by the user.
             verbose: 'true') {
-        fileset(dir: './build/libs') {
-            include(name: '**/*.jar')
-        }
-    }
-}
-
-task deployEV3 << {
-    ssh.run {
-        session(remotes.ev3_1) {
-            put from: 'build/libs/*.jar', into: '/home/lejos/programs/AI-Robot-2016S-CSIT441-1.0.jar'
+        fileset(dir: 'build/libs') {
+            include(name: '**/**')
         }
     }
 }
