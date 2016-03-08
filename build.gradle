@@ -70,7 +70,7 @@ repositories {
 }
 
 dependencies {
-    sshAntTask 'org.apache.ant:ant-jsch:1.9.4', 'jsch:jsch:0.1.29'
+    sshAntTask 'org.apache.ant:ant-jsch:1.7.1', 'jsch:jsch:0.1.29'
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     provided group: 'lejos', name: 'ev3classes', version: '1.0'
     testCompile group: 'junit', name: 'junit', version: '4.+'
@@ -81,12 +81,24 @@ test {
 }
 
 task deployEV3Ant << {
-    ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp', classpath: configurations.sshAntTask.asPath)
-    ant.scp(todir: ev3_username + '@' + ev3_server + ':/home/lejos/programs',
-            password: ev3_password,
+    description = 'Update files on remote server.'
+
+    // Get passphrase from user input.
+    def console = System.console()
+    def passphrase = 'root'
+
+    // Redefine scp Ant task, with the classpath property set to our newly defined
+    // sshAntTask configuration classpath.
+    ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp',
+            classpath: configurations.sshAntTask.asPath)
+
+    // Invoke the scp Ant task. (Use gradle -i update to see the output of the Ant task.)
+    ant.scp(todir: 'root@192.168.0.10:/home/lejos/programs',
+            keyfile: 'keys/id_rsa',
+            passphrase: passphrase as String, // Use phassphrase entered by the user.
             verbose: 'true') {
-        fileset(dir: './build/libs') {
-            include(name: '**/*.jar')
+        fileset(dir: 'build/libs') {
+            include(name: '**/**')
         }
     }
 }
