@@ -89,10 +89,10 @@ test {
 //    }
 //}
 
-task deployEV3Gradle << {
+task deployEV3 << {
     ssh.run {
         session(remotes.ev3_1) {
-            put from: './build/libs/*.jar', into: '/home/lejos/programs'
+            put from: 'build/libs/*.jar', into: '/home/lejos/programs/AI-Robot.jar'
         }
     }
 }
