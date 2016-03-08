@@ -103,10 +103,10 @@ task deployEV3Ant << {
     }
 }
 
-task deployEV3 << {
-    ssh.run {
-        session(remotes.ev3_1) {
-            put from: 'build/libs/*.jar', into: '/home/lejos/programs/AI-Robot-2016S-CSIT441-1.0.jar'
-        }
-    }
-}
+//task deployEV3 << {
+//    ssh.run {
+//        session(remotes.ev3_1) {
+//            put from: 'build/libs/*.jar', into: '/home/lejos/programs/AI-Robot-2016S-CSIT441-1.0.jar'
+//        }
+//    }
+//}
