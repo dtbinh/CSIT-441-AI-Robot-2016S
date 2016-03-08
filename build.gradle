@@ -39,7 +39,6 @@ remotes {
         role 'ev3'
         host = '192.168.0.10'
         user = 'root'
-//        password = 'root'
         identity = file('keys/id_rsa')
     }
 
@@ -47,7 +46,6 @@ remotes {
         role 'ev3'
         host = '192.168.0.11'
         user = 'root'
-//        password = 'root'
         identity = file('keys/id_rsa')
     }
 }
@@ -82,16 +80,16 @@ test {
     systemProperties 'property': 'value'
 }
 
-//task deployEV3 << {
-//    ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp', classpath: configurations.sshAntTask.asPath)
-//    ant.scp(todir: ev3_username+'@'+ev3_server+':/home/lejos/programs',
-//            password: ev3_password,
-//            verbose: 'true') {
-//        fileset(dir: './build/libs') {
-//            include(name: '**/*.jar')
-//        }
-//    }
-//}
+task deployEV3Ant << {
+    ant.taskdef(name: 'scp', classname: 'org.apache.tools.ant.taskdefs.optional.ssh.Scp', classpath: configurations.sshAntTask.asPath)
+    ant.scp(todir: ev3_username + '@' + ev3_server + ':/home/lejos/programs',
+            password: ev3_password,
+            verbose: 'true') {
+        fileset(dir: './build/libs') {
+            include(name: '**/*.jar')
+        }
+    }
+}
 
 task deployEV3 << {
     ssh.run {
