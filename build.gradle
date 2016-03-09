@@ -7,7 +7,6 @@ apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'org.hidetake.ssh'
 
-sourceCompatibility = 1.7
 version = '1.0'
 compileJava.options.encoding = 'UTF-8'
 mainClassName = 'Main'
@@ -83,7 +82,7 @@ task deployEV3Ant << {
     // Invoke the scp Ant task. (Use gradle -i update to see the output of the Ant task.)
     ant.scp(todir: 'root@192.168.0.10:/home/lejos/programs',
             keyfile: 'keys/id_rsa',
-            passphrase: passphrase as String, // Use phassphrase entered by the user.
+            passphrase: passphrase as String, // Use passphrase entered by the user.
             verbose: 'true') {
         fileset(dir: 'build/libs') {
             include(name: '**/**')
