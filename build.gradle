@@ -62,9 +62,13 @@ repositories {
         flatDir {
             dirs System.getenv("EV3_HOME") + '/lib/ev3'
         }
-    } else {
+    } else if (OperatingSystem.current().isMacOsX()) {
         flatDir {
             dirs '/Users/michael/bin/leJOS_EV3_0.9.1-beta' + '/lib/ev3'
+        }
+    } else if (OperatingSystem.current().isLinux()) {
+        flatDir {
+            dirs System.getenv("EV3_HOME") + '/lib/ev3'
         }
     }
 }
