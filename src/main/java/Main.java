@@ -36,6 +36,9 @@ import utils.Notifications;
  *      Sensor 2:
  *      Sensor 3:
  *      Sensor 4:
+ *
+ *  Main class will simply act as a container to start operations
+ *  Will pass off actual movement and solving to Driver class
  */
 public class Main {
 
