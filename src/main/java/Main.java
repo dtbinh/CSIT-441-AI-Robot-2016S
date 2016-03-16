@@ -1,5 +1,8 @@
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.motor.Motor;
+import lejos.robotics.Gyroscope;
+import lejos.robotics.navigation.OmniPilot;
 import parts.EV3LocalBrick;
 import parts.EV3RemoteBrick;
 import utils.Notifications;
@@ -29,6 +32,9 @@ public class Main {
 
     private  EV3LocalBrick localEV3;
     private  EV3RemoteBrick remoteEV3;
+
+    private float wheelDistanceFromCenter = 12;
+    private float wheelDiameter = 10;
 
 
     public static void main(String[] args) {
@@ -66,5 +72,9 @@ public class Main {
     private void cleanExit() {
         localEV3.cleanExit();
         remoteEV3.cleanExit();
+    }
+
+    private void setupPilotClass() {
+        OmniPilot pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, false, , );
     }
 }
