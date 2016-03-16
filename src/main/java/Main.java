@@ -1,7 +1,16 @@
+import lejos.hardware.Battery;
 import lejos.hardware.Button;
+import lejos.hardware.Power;
+import lejos.hardware.ev3.EV3;
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3GyroSensor;
+import lejos.hardware.sensor.HiTechnicGyro;
 import lejos.robotics.Gyroscope;
+import lejos.robotics.GyroscopeAdapter;
+import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.OmniPilot;
 import parts.EV3LocalBrick;
 import parts.EV3RemoteBrick;
@@ -32,8 +41,11 @@ public class Main {
 
     private  EV3LocalBrick localEV3;
     private  EV3RemoteBrick remoteEV3;
+    private OmniPilot pilot;
 
+    // wheelDistanceFromCenter - the wheel distance from center
     private float wheelDistanceFromCenter = 12;
+    // wheelDiameter - the wheel diameter
     private float wheelDiameter = 10;
 
 
@@ -75,6 +87,19 @@ public class Main {
     }
 
     private void setupPilotClass() {
-        OmniPilot pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, false, , );
+        HiTechnicGyro gyro = new HiTechnicGyro(SensorPort.S2);
+        SampleProvider spin = gyro.getMode(0);
+        GyroscopeAdapter myGyro = new GyroscopeAdapter(spin,200f);
+
+        // Parameters:
+        // wheelDistanceFromCenter - the wheel distance from center
+        // wheelDiameter - the wheel diameter
+        // centralMotor - the central motor
+        // CW120degMotor - the motor at 120 degrees clockwise from front
+        // CCW120degMotor - the motor at 120 degrees counter-clockwise from front
+        // centralWheelFrontal - if true, the central wheel frontal else it is facing back
+        // motorReverse - if motors are mounted reversed
+        // gyro - the gyroscope
+        pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, false, LocalEV3.get().getPower(), myGyro);
     }
 }

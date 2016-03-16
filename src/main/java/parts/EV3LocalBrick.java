@@ -18,9 +18,7 @@ import lejos.hardware.motor.Motor;
 public class EV3LocalBrick {
 
     public EV3LocalBrick() {
-        // TODO Setup motors if needed
 
-        // TODO Setup sensors
 
     }
 
