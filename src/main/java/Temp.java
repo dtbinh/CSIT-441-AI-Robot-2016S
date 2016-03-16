@@ -10,6 +10,8 @@ import lejos.robotics.navigation.OmniPilot;
 
 /**
  * Robot travels to obstacle and back again
+ *
+ * Found a reference online, going to keep it in the code for now
  */
 public class Temp {
     OmniPilot pilot;
