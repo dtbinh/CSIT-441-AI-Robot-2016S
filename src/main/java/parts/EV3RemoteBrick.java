@@ -24,14 +24,10 @@ public class EV3RemoteBrick {
     private String address = "192.168.0.11";
 
     public EV3RemoteBrick() {
-        //Setup connection
+        // Setup connection
         connectToMasterBrick();
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean connectToMasterBrick() {
         try {
             //Remote IP address of the secondary brick

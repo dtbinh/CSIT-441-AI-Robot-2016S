@@ -19,7 +19,6 @@ public class EV3LocalBrick {
 
     public EV3LocalBrick() {
 
-
     }
 
     public void printReady() {

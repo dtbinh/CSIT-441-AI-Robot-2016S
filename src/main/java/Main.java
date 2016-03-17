@@ -51,11 +51,17 @@ public class Main {
     // wheelDiameter - the wheel diameter
     private float wheelDiameter = 10;
 
-
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         new Main();
     }
 
+    /**
+     * Actual start of program as denoted by Kate's object oriented design
+     */
     public Main() {
         setup();
         setupPilotClass();
@@ -75,16 +81,58 @@ public class Main {
         cleanExit();
     }
 
+    /**
+     * Current container for movement
+     */
+    private void runGolfRobot() {
+        pilot.forward();
+
+        while (!Motor.A.isStalled()) {
+        }
+        pilot.rotate(-90);
+        pilot.forward();
+
+        while (!Motor.A.isStalled()) {
+        }
+        pilot.rotate(-90);
+        pilot.forward();
+
+        while (!Motor.A.isStalled()) {
+        }
+        pilot.rotate(-90);
+        pilot.forward();
+
+        while (!Motor.A.isStalled()) {}
+
+        pilot.stop();
+        }
+
+    /**
+     * Contained methods to initiate all of the objects and classes required for the robot to move
+     */
     private void setup() {
+        // Dictates the 2 brains and sets the remote control of the second brain
         localEV3 = new EV3LocalBrick();
         remoteEV3 = new EV3RemoteBrick();
+
+        // Sets up the pilot class
+        setupPilotClass();
 
         //Testing the ready functionality
         Notifications.ready();
     }
 
     /**
+     * Method to contain all the work that will indicate the robot has exited it's workflow
+     */
+    private void cleanExit() {
+        localEV3.cleanExit();
+        remoteEV3.cleanExit();
+    }
+
+    /**
      * Basic hello world to test the deploy functionality is working properly
+     * Moves the motors forward, causing the robot to spin in circles
      */
     private void helloWorld() {
         localEV3.helloWorld();
@@ -97,12 +145,23 @@ public class Main {
         LCD.refresh();
     }
 
-    private void cleanExit() {
-        localEV3.cleanExit();
-        remoteEV3.cleanExit();
+    /**
+     * Tests the pilot class to make sure the wheels are moving correctly
+     * @throws Exception Cause I'm lazy and it's a test method
+     */
+    private void testPilot() throws Exception {
+        pilot.forward();
+        Thread.sleep(2000);
+        pilot.backward();
+        Thread.sleep(2000);
+        pilot.stop();
     }
 
+    /**
+     * Sets up the Omnipilot class
+     */
     private void setupPilotClass() {
+        // Builds the gyro object
         HiTechnicGyro gyro = new HiTechnicGyro(SensorPort.S2);
         SampleProvider spin = gyro.getMode(0);
         GyroscopeAdapter myGyro = new GyroscopeAdapter(spin,200f);
