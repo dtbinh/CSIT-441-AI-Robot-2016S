@@ -58,7 +58,20 @@ public class Main {
 
     public Main() {
         setup();
-        helloWorld();
+        setupPilotClass();
+
+        pilot.moveStraight((int) Motor.A.getMaxSpeed(), 0);
+
+        while(!Motor.B.isStalled()) {
+
+        }
+
+        pilot.rotate(90);
+
+        pilot.forward();
+
+        Button.waitForAnyPress();
+
         cleanExit();
     }
 
@@ -103,6 +116,8 @@ public class Main {
         // centralWheelFrontal - if true, the central wheel frontal else it is facing back
         // motorReverse - if motors are mounted reversed
         // gyro - the gyroscope
-        pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, false, LocalEV3.get().getPower(), myGyro);
+        pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower(), myGyro);
+
+        pilot.setSpeed((int) Motor.A.getMaxSpeed());
     }
 }
