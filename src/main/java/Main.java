@@ -64,7 +64,6 @@ public class Main {
      */
     public Main() {
         setup();
-        setupPilotClass();
 
         pilot.moveStraight((int) Motor.A.getMaxSpeed(), 0);
 
@@ -80,32 +79,6 @@ public class Main {
 
         cleanExit();
     }
-
-    /**
-     * Current container for movement
-     */
-    private void runGolfRobot() {
-        pilot.forward();
-
-        while (!Motor.A.isStalled()) {
-        }
-        pilot.rotate(-90);
-        pilot.forward();
-
-        while (!Motor.A.isStalled()) {
-        }
-        pilot.rotate(-90);
-        pilot.forward();
-
-        while (!Motor.A.isStalled()) {
-        }
-        pilot.rotate(-90);
-        pilot.forward();
-
-        while (!Motor.A.isStalled()) {}
-
-        pilot.stop();
-        }
 
     /**
      * Contained methods to initiate all of the objects and classes required for the robot to move
