@@ -8,6 +8,7 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.HiTechnicGyro;
+import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.Gyroscope;
 import lejos.robotics.GyroscopeAdapter;
 import lejos.robotics.SampleProvider;
@@ -15,6 +16,10 @@ import lejos.robotics.navigation.OmniPilot;
 import parts.EV3LocalBrick;
 import parts.EV3RemoteBrick;
 import utils.Notifications;
+
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 /**
  * Brick 1:
@@ -42,14 +47,16 @@ import utils.Notifications;
  */
 public class Main {
 
-    private  EV3LocalBrick localEV3;
-    private  EV3RemoteBrick remoteEV3;
+    private LocalEV3 localEV3;
+    private RemoteEV3 remoteEV3;
     private OmniPilot pilot;
 
+    private String address = "192.168.0.11";
+
     // wheelDistanceFromCenter - the wheel distance from center
-    private float wheelDistanceFromCenter = 12;
+    private float wheelDistanceFromCenter = 4.75f;
     // wheelDiameter - the wheel diameter
-    private float wheelDiameter = 10;
+    private float wheelDiameter = 1.875f;
 
     /**
      *
@@ -65,19 +72,8 @@ public class Main {
     public Main() {
         setup();
 
-        pilot.moveStraight((int) Motor.A.getMaxSpeed(), 0);
-
-        while(!Motor.B.isStalled()) {
-
-        }
-
-        pilot.rotate(90);
-
-        pilot.forward();
-
-        Button.waitForAnyPress();
-
-        cleanExit();
+        Driver driver = new Driver(pilot, localEV3, remoteEV3);
+        driver.start();
     }
 
     /**
@@ -85,49 +81,22 @@ public class Main {
      */
     private void setup() {
         // Dictates the 2 brains and sets the remote control of the second brain
-        localEV3 = new EV3LocalBrick();
-        remoteEV3 = new EV3RemoteBrick();
+        try {
+            //Remote IP address of the secondary brick
+            remoteEV3 = new RemoteEV3(address);
+        } catch (RemoteException e) {
+
+        } catch (MalformedURLException e) {
+
+        } catch (NotBoundException e) {
+
+        }
 
         // Sets up the pilot class
-        setupPilotClass();
+        setupPilotClassWithoutGyro();
 
         //Testing the ready functionality
         Notifications.ready();
-    }
-
-    /**
-     * Method to contain all the work that will indicate the robot has exited it's workflow
-     */
-    private void cleanExit() {
-        localEV3.cleanExit();
-        remoteEV3.cleanExit();
-    }
-
-    /**
-     * Basic hello world to test the deploy functionality is working properly
-     * Moves the motors forward, causing the robot to spin in circles
-     */
-    private void helloWorld() {
-        localEV3.helloWorld();
-        remoteEV3.helloWorld();
-
-        LCD.clear();
-        LCD.drawString("First EV3 Program", 0, 5);
-        Button.waitForAnyPress();
-        LCD.clear();
-        LCD.refresh();
-    }
-
-    /**
-     * Tests the pilot class to make sure the wheels are moving correctly
-     * @throws Exception Cause I'm lazy and it's a test method
-     */
-    private void testPilot() throws Exception {
-        pilot.forward();
-        Thread.sleep(2000);
-        pilot.backward();
-        Thread.sleep(2000);
-        pilot.stop();
     }
 
     /**
@@ -149,6 +118,25 @@ public class Main {
         // motorReverse - if motors are mounted reversed
         // gyro - the gyroscope
         pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower(), myGyro);
+
+        pilot.setSpeed((int) Motor.A.getMaxSpeed());
+    }
+
+    /**
+     * Sets up the Omnipilot class
+     * Does not initiate gyroscope as part of the class
+     */
+    private void setupPilotClassWithoutGyro() {
+        // Parameters:
+        // wheelDistanceFromCenter - the wheel distance from center
+        // wheelDiameter - the wheel diameter
+        // centralMotor - the central motor
+        // CW120degMotor - the motor at 120 degrees clockwise from front
+        // CCW120degMotor - the motor at 120 degrees counter-clockwise from front
+        // centralWheelFrontal - if true, the central wheel frontal else it is facing back
+        // motorReverse - if motors are mounted reversed
+        // gyro - the gyroscope
+        pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower());
 
         pilot.setSpeed((int) Motor.A.getMaxSpeed());
     }
