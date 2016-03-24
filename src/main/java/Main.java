@@ -1,5 +1,6 @@
 import lejos.hardware.Battery;
 import lejos.hardware.Button;
+import lejos.hardware.LED;
 import lejos.hardware.Power;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
@@ -73,6 +74,9 @@ public class Main {
         setup();
 
         Driver driver = new Driver(pilot, localEV3, remoteEV3);
+
+        Notifications.ready();
+
         driver.start();
     }
 
@@ -82,21 +86,13 @@ public class Main {
     private void setup() {
         // Dictates the 2 brains and sets the remote control of the second brain
         try {
-            //Remote IP address of the secondary brick
             remoteEV3 = new RemoteEV3(address);
-        } catch (RemoteException e) {
-
-        } catch (MalformedURLException e) {
-
-        } catch (NotBoundException e) {
+        } catch (RemoteException | MalformedURLException | NotBoundException e) {
 
         }
 
         // Sets up the pilot class
         setupPilotClassWithoutGyro();
-
-        //Testing the ready functionality
-        Notifications.ready();
     }
 
     /**
