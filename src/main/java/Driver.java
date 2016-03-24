@@ -44,24 +44,23 @@ public class Driver {
     }
 
     private void mapSmallBoard() {
+        // Move bottom color sensor to gyro input, it's not currently in use
+
         EV3ColorSensor colorSensor = new EV3ColorSensor(remoteEV3.getPort("S2"));
 
         colorSensor.getColorID();
 
-        while (true) {
-            LCD.clear();
-            LCD.drawString("" + colorSensor.getColorID(), 0, 5);
-            Button.waitForAnyPress();
-            LCD.clear();
-            LCD.refresh();
-            Button.LEDPattern(0);
-        }
+        while (colorSensor.getColorID() != Color.BLACK) {
+            pilot.moveStraight(Motor.A.getMaxSpeed() / 16, 0);
 
-//        while (colorSensor.getColorID() != Color.BLACK) {
-//            pilot.moveStraight(Motor.A.getMaxSpeed(), 0);
-//
-//
-//        }
+
+            // If the robot sees white, have it re align itself
+            while (colorSensor.getColorID() != Color.RED) {
+                pilot.rotate(-20);
+            }
+
+
+        }
 
         Button.waitForAnyPress();
 

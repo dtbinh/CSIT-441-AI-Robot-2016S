@@ -134,6 +134,6 @@ public class Main {
         // gyro - the gyroscope
         pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower());
 
-        pilot.setSpeed((int) Motor.A.getMaxSpeed());
+        pilot.setSpeed((int) Motor.A.getMaxSpeed() / 32);
     }
 }
