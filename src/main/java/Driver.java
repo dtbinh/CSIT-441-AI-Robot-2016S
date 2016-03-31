@@ -6,6 +6,7 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.Color;
@@ -40,23 +41,24 @@ public class Driver {
      *
      */
     public void start() {
-        mapSmallBoard();
+//        mapSmallBoard();
+        testProxSensors();
     }
 
     private void mapSmallBoard() {
         // Move bottom color sensor to gyro input, it's not currently in use
 
-        EV3ColorSensor colorSensor = new EV3ColorSensor(remoteEV3.getPort("S2"));
+        EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S4);
 
         colorSensor.getColorID();
 
         while (colorSensor.getColorID() != Color.BLACK) {
-            pilot.moveStraight(Motor.A.getMaxSpeed() / 16, 0);
+            pilot.moveStraight(Motor.A.getMaxSpeed() / 128, 0);
 
 
             // If the robot sees white, have it re align itself
             while (colorSensor.getColorID() != Color.RED) {
-                pilot.rotate(-20);
+                pilot.rotate(-5);
             }
 
 
@@ -65,5 +67,18 @@ public class Driver {
         Button.waitForAnyPress();
 
         colorSensor.close();
+    }
+
+    private void testProxSensors() {
+        EV3UltrasonicSensor sensor = new EV3UltrasonicSensor(SensorPort.S1);
+        EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S4);
+
+        Button.LEDPattern(4);
+
+        while (colorSensor.getColorID() == Color.RED) {
+            Button.waitForAnyPress();
+            LCD.drawString(sensor.getDistanceMode().sampleSize() + "", 0, 5);
+            LCD.refresh();
+        }
     }
 }
