@@ -1,3 +1,4 @@
+import Threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
@@ -78,7 +79,7 @@ public class Driver implements Runnable {
     private void mapSmallBoard() {
         colorSensorDown.getColorID();
 
-        while (colorSensorDown.getColorID() != Color.BLACK) {
+        while (SensorThread.colorDownID != Color.BLACK) {
             pilot.moveStraight(Motor.A.getMaxSpeed() / 128, 0);
 
             // If the robot sees white, have it re align itself

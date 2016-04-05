@@ -1,3 +1,4 @@
+import Threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
@@ -87,6 +88,9 @@ public class Main {
         driver.run();
 
         Button.waitForAnyPress();
+
+        SensorThread.threadStop = false;
+        Driver.stopThread = false;
 
         closeParts();
     }
