@@ -81,7 +81,9 @@ public class Main {
         // Sets up the pilot class
         setupPilotClassWithoutGyro();
 
-        Driver driver = new Driver(pilot, localEV3, remoteEV3, colorSensorDown);
+        // Setup threads
+        Driver driver = new Driver(pilot, localEV3, remoteEV3);
+        SensorThread sensorThread = new SensorThread(colorSensorDown);
 
         Notifications.ready();
 

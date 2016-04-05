@@ -21,7 +21,6 @@ public class Driver implements Runnable {
     OmniPilot pilot;
     LocalEV3 localEV3;
     RemoteEV3 remoteEV3;
-    EV3ColorSensor colorSensorDown;
 
     public static boolean stopThread = false;
 
@@ -29,11 +28,10 @@ public class Driver implements Runnable {
         this.pilot = pilot;
     }
 
-    public Driver(OmniPilot pilot, LocalEV3 localEV3, RemoteEV3 remoteEV3, EV3ColorSensor colorSensorDown) {
+    public Driver(OmniPilot pilot, LocalEV3 localEV3, RemoteEV3 remoteEV3) {
         this.pilot = pilot;
         this.localEV3 = localEV3;
         this.remoteEV3 = remoteEV3;
-        this.colorSensorDown = colorSensorDown;
     }
 
     /**
@@ -77,20 +75,17 @@ public class Driver implements Runnable {
     }
 
     private void mapSmallBoard() {
-        colorSensorDown.getColorID();
 
         while (SensorThread.colorDownID != Color.BLACK) {
             pilot.moveStraight(Motor.A.getMaxSpeed() / 128, 0);
 
             // If the robot sees white, have it re align itself
-            while (colorSensorDown.getColorID() != Color.RED) {
+            while (SensorThread.colorDownID != Color.RED) {
                 pilot.rotate(-5);
             }
         }
 
         Button.waitForAnyPress();
-
-        colorSensorDown.close();
     }
 
     private void testProxSensors() {
