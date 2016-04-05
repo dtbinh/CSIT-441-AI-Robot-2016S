@@ -37,10 +37,29 @@ public class Notifications {
     /**
      * Error notification
      * Flashes the LED to red flashing
-     * Plays an error tone
+     * Plays an errorWithPause tone
      */
-    public static void error() {
+    public static void errorWithPause() {
+        Button.LEDPattern(8);
+        Sound.buzz();
+    }
+
+    public static void errorWithPause(String errorText) {
+        LCD.clear();
+        Button.LEDPattern(8);
+        LCD.drawString(errorText, 0, 5);
+        Button.waitForAnyPress();
+        LCD.clear();
+        LCD.refresh();
+        Button.LEDPattern(0);
+    }
+
+    public static void runningOperation() {
         Button.LEDPattern(5);
+    }
+
+    public static void notifyShutdown() {
+        Button.LEDPattern(4);
         Sound.buzz();
     }
 

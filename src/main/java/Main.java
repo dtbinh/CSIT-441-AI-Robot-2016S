@@ -1,21 +1,13 @@
-import lejos.hardware.Battery;
 import lejos.hardware.Button;
-import lejos.hardware.LED;
-import lejos.hardware.Power;
-import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3GyroSensor;
+import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.HiTechnicGyro;
 import lejos.remote.ev3.RemoteEV3;
-import lejos.robotics.Gyroscope;
 import lejos.robotics.GyroscopeAdapter;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.OmniPilot;
-import parts.EV3LocalBrick;
-import parts.EV3RemoteBrick;
 import utils.Notifications;
 
 import java.net.MalformedURLException;
@@ -52,6 +44,9 @@ public class Main {
     private RemoteEV3 remoteEV3;
     private OmniPilot pilot;
 
+    // Local parts
+    EV3ColorSensor colorSensorDown;
+
     private String address = "192.168.0.11";
 
     // wheelDistanceFromCenter - the wheel distance from center
@@ -71,28 +66,29 @@ public class Main {
      * Actual start of program as denoted by Kate's object oriented design
      */
     public Main() {
-        setup();
-
-        Driver driver = new Driver(pilot, localEV3, remoteEV3);
-
-        Notifications.ready();
-
-        driver.start();
-    }
-
-    /**
-     * Contained methods to initiate all of the objects and classes required for the robot to move
-     */
-    private void setup() {
-        // Dictates the 2 brains and sets the remote control of the second brain
+        // Connects the 2 brains and sets the remote control of the second brain
         try {
             remoteEV3 = new RemoteEV3(address);
         } catch (RemoteException | MalformedURLException | NotBoundException e) {
-
+            Notifications.errorWithPause("Could not connect brains");
+            System.exit(1);
         }
+
+        // TODO Setup local sensors
+        colorSensorDown = new EV3ColorSensor(SensorPort.S4);
 
         // Sets up the pilot class
         setupPilotClassWithoutGyro();
+
+        Driver driver = new Driver(pilot, localEV3, remoteEV3, colorSensorDown);
+
+        Notifications.ready();
+
+        driver.run();
+
+        Button.waitForAnyPress();
+
+        closeParts();
     }
 
     /**
@@ -135,5 +131,10 @@ public class Main {
         pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower());
 
         pilot.setSpeed((int) Motor.A.getMaxSpeed() / 32);
+    }
+
+    private void closeParts() {
+        // Close local parts
+        colorSensorDown.close();
     }
 }
