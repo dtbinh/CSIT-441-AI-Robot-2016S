@@ -1,7 +1,6 @@
-package Threads;
+package threads;
 
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.robotics.Color;
 
 /**
  * Created by michael on 4/4/2016.
@@ -19,7 +18,7 @@ public class SensorThread implements Runnable {
 
     @Override
     public void run() {
-        while(threadStop)
+        while(!threadStop)
         colorDownID = colorSensorDown.getColorID();
     }
 }

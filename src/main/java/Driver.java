@@ -1,4 +1,4 @@
-import Threads.SensorThread;
+import threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
@@ -47,7 +47,7 @@ public class Driver implements Runnable {
 
     @Override
     public void run() {
-
+        mapSmallBoard();
     }
 
     public void setThreadStop() {
@@ -77,15 +77,14 @@ public class Driver implements Runnable {
     private void mapSmallBoard() {
 
         while (SensorThread.colorDownID != Color.BLACK) {
-            pilot.moveStraight(Motor.A.getMaxSpeed() / 128, 0);
+//            pilot.moveStraight(Motor.A.getMaxSpeed() / 200, 0);
+            pilot.travel(100, 30, false);
 
             // If the robot sees white, have it re align itself
             while (SensorThread.colorDownID != Color.RED) {
                 pilot.rotate(-5);
             }
         }
-
-        Button.waitForAnyPress();
     }
 
     private void testProxSensors() {

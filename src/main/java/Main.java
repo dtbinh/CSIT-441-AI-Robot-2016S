@@ -1,4 +1,4 @@
-import Threads.SensorThread;
+import threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
@@ -82,12 +82,17 @@ public class Main {
         setupPilotClassWithoutGyro();
 
         // Setup threads
-        Driver driver = new Driver(pilot, localEV3, remoteEV3);
-        SensorThread sensorThread = new SensorThread(colorSensorDown);
+        Thread driver = new Thread(new Driver(pilot, localEV3, remoteEV3));
+
+//        SensorThread sensorThread = new SensorThread(colorSensorDown);
+        Thread sensorThread = new Thread(new SensorThread(colorSensorDown));
 
         Notifications.ready();
 
-        driver.run();
+
+        sensorThread.start();
+
+        driver.start();
 
         Button.waitForAnyPress();
 
