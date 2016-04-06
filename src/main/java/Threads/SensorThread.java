@@ -6,19 +6,23 @@ import lejos.hardware.sensor.EV3ColorSensor;
  * Created by michael on 4/4/2016.
  */
 public class SensorThread implements Runnable {
-    private EV3ColorSensor colorSensorDown;
+    private EV3ColorSensor colorSensorDownLeft;
+    private EV3ColorSensor colorSensorDownRight;
 
     public static boolean threadStop = false;
-    public static int colorDownID;
+    public static int colorDownIDLeft;
+    public static int colorDownIDRight;
 
 
-    public SensorThread(EV3ColorSensor colorSensorDown) {
-        this.colorSensorDown = colorSensorDown;
+    public SensorThread(EV3ColorSensor colorSensorDownLeft, EV3ColorSensor colorSensorDownRight) {
+        this.colorSensorDownLeft = colorSensorDownLeft;
+        this.colorSensorDownRight = colorSensorDownRight;
     }
 
     @Override
     public void run() {
         while(!threadStop)
-        colorDownID = colorSensorDown.getColorID();
+        colorDownIDLeft = colorSensorDownLeft.getColorID();
+        colorDownIDRight = colorSensorDownRight.getColorID();
     }
 }

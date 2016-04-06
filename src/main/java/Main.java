@@ -22,18 +22,18 @@ import java.rmi.RemoteException;
  *      Motor C: 120 Clockwise wheel
  *      Motor D: Putter arm
  *      Sensor 1: Forward Prox
- *      Sensor 2: 120 Clockwise Prox
- *      Sensor 3: 120 CClockwise Prox
- *      Sensor 4: Gyroscope
+ *      Sensor 2: Color Sensor Left
+ *      Sensor 3: Color Sensor Right
+ *      Sensor 4:
  *
  *  Brick 2:
  *      Motor A: Forward color
  *      Motor B: Downward color
  *      Motor C:
  *      Motor D:
- *      Sensor 1:
- *      Sensor 2:
- *      Sensor 3:
+ *      Sensor 1: Prox Sensor Left
+ *      Sensor 2: Prox Sensor Right
+ *      Sensor 3: Color Sensor Front
  *      Sensor 4:
  *
  *  Main class will simply act as a container to start operations
@@ -46,7 +46,8 @@ public class Main {
     private OmniPilot pilot;
 
     // Local parts
-    EV3ColorSensor colorSensorDown;
+    EV3ColorSensor colorSensorDownLeft;
+    EV3ColorSensor colorSensorDownRgiht;
 
     private String address = "192.168.0.11";
 
@@ -76,7 +77,8 @@ public class Main {
         }
 
         // TODO Setup local sensors
-        colorSensorDown = new EV3ColorSensor(SensorPort.S4);
+        colorSensorDownLeft = new EV3ColorSensor(SensorPort.S2);
+        colorSensorDownRgiht = new EV3ColorSensor(SensorPort.S3);
 
         // Sets up the pilot class
         setupPilotClassWithoutGyro();
@@ -84,8 +86,8 @@ public class Main {
         // Setup threads
         Thread driver = new Thread(new Driver(pilot, localEV3, remoteEV3));
 
-//        SensorThread sensorThread = new SensorThread(colorSensorDown);
-        Thread sensorThread = new Thread(new SensorThread(colorSensorDown));
+//        SensorThread sensorThread = new SensorThread(colorSensorDownLeft);
+        Thread sensorThread = new Thread(new SensorThread(colorSensorDownLeft, colorSensorDownRgiht));
 
         Notifications.ready();
 
@@ -96,8 +98,8 @@ public class Main {
 
         Button.waitForAnyPress();
 
-        SensorThread.threadStop = false;
-        Driver.stopThread = false;
+        SensorThread.threadStop = true;
+        Driver.stopThread = true;
 
         closeParts();
     }
@@ -146,6 +148,6 @@ public class Main {
 
     private void closeParts() {
         // Close local parts
-        colorSensorDown.close();
+        colorSensorDownLeft.close();
     }
 }
