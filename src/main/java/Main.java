@@ -1,3 +1,4 @@
+import lejos.robotics.Color;
 import threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
@@ -45,10 +46,6 @@ public class Main {
     private RemoteEV3 remoteEV3;
     private OmniPilot pilot;
 
-    // Local parts
-    EV3ColorSensor colorSensorDownLeft;
-    EV3ColorSensor colorSensorDownRgiht;
-
     private String address = "192.168.0.11";
 
     // wheelDistanceFromCenter - the wheel distance from center
@@ -69,39 +66,35 @@ public class Main {
      */
     public Main() {
         // Connects the 2 brains and sets the remote control of the second brain
-        try {
-            remoteEV3 = new RemoteEV3(address);
-        } catch (RemoteException | MalformedURLException | NotBoundException e) {
-            Notifications.errorWithPause("Could not connect brains");
-            System.exit(1);
-        }
-
-        // TODO Setup local sensors
-        colorSensorDownLeft = new EV3ColorSensor(SensorPort.S2);
-        colorSensorDownRgiht = new EV3ColorSensor(SensorPort.S3);
+//        try {
+//            remoteEV3 = new RemoteEV3(address);
+//        } catch (RemoteException | MalformedURLException | NotBoundException e) {
+//            Notifications.errorWithPause("Could not connect brains");
+//            System.exit(1);
+//        }
 
         // Sets up the pilot class
         setupPilotClassWithoutGyro();
 
         // Setup threads
-        Thread driver = new Thread(new Driver(pilot, localEV3, remoteEV3));
+//        Thread driver = new Thread(new Driver(pilot, localEV3, remoteEV3));
+        Driver driver = new Driver(pilot, localEV3, remoteEV3);
 
 //        SensorThread sensorThread = new SensorThread(colorSensorDownLeft);
-        Thread sensorThread = new Thread(new SensorThread(colorSensorDownLeft, colorSensorDownRgiht));
+        Thread sensorThread = new Thread(new SensorThread(new EV3ColorSensor(SensorPort.S2), new EV3ColorSensor(SensorPort.S3)));
+
 
         Notifications.ready();
-
-
         sensorThread.start();
 
-        driver.start();
-
-        Button.waitForAnyPress();
+        try {
+            driver.run();
+        } catch (InterruptedException e) {
+            System.out.printf("");
+        }
 
         SensorThread.threadStop = true;
         Driver.stopThread = true;
-
-        closeParts();
     }
 
     /**
@@ -143,11 +136,6 @@ public class Main {
         // gyro - the gyroscope
         pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower());
 
-        pilot.setSpeed((int) Motor.A.getMaxSpeed() / 32);
-    }
-
-    private void closeParts() {
-        // Close local parts
-        colorSensorDownLeft.close();
+        pilot.setSpeed((int) Motor.A.getMaxSpeed() / 300);
     }
 }

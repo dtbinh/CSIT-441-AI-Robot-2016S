@@ -1,3 +1,4 @@
+import lejos.hardware.motor.Motor;
 import threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
@@ -16,10 +17,14 @@ import java.util.TimerTask;
 /**
  * Created by michael on 3/16/16.
  */
-public class Driver implements Runnable {
+public class Driver {
     OmniPilot pilot;
     LocalEV3 localEV3;
     RemoteEV3 remoteEV3;
+
+    private long reverseTime = 100;
+    private int speed = 1;
+
 
     public static boolean stopThread = false;
 
@@ -44,8 +49,8 @@ public class Driver implements Runnable {
 //    }
 
 
-    @Override
-    public void run() {
+
+    public void run() throws InterruptedException {
         mapSmallBoard();
     }
 
@@ -73,19 +78,23 @@ public class Driver implements Runnable {
         Notifications.notifyShutdown();
     }
 
-    private void mapSmallBoard() {
-        //pilot.arc(10, 100);
-        pilot.arc(10, 100, 5);
-
-//        while (SensorThread.colorDownIDLeft != Color.WHITE) {
-////            pilot.moveStraight(Motor.A.getMaxSpeed() / 200, 0);
-//            pilot.travel(100, 30, false);
-//
-//            // If the robot sees white, have it re align itself
-//            while (SensorThread.colorDownIDLeft != Color.RED) {
-//                pilot.rotate(-5);
-//            }
-//        }
+    private void mapSmallBoard() throws InterruptedException {
+        while (SensorThread.colorDownIDLeft != Color.BLACK && SensorThread.colorDownIDRight != Color.BLACK) {
+            pilot.moveStraight(speed, 0);
+            while (SensorThread.colorDownIDLeft != Color.WHITE || SensorThread.colorDownIDRight != Color.WHITE) {
+                if (SensorThread.colorDownIDLeft != Color.WHITE) {
+                    while (SensorThread.colorDownIDLeft != Color.WHITE) {
+                        pilot.rotate(1, true);
+                    }
+                    pilot.stop();
+                } else if (SensorThread.colorDownIDRight != Color.WHITE) {
+                    while (SensorThread.colorDownIDRight != Color.WHITE) {
+                        pilot.rotate(-1, true);
+                    }
+                    pilot.stop();
+                }
+            }
+        }
     }
 
     private void testProxSensors() {
