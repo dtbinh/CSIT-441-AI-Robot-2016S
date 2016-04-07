@@ -1,4 +1,8 @@
 import lejos.robotics.Color;
+import lejos.robotics.chassis.Chassis;
+import lejos.robotics.chassis.Wheel;
+import lejos.robotics.chassis.WheeledChassis;
+import lejos.robotics.navigation.MovePilot;
 import threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
@@ -41,10 +45,8 @@ import java.rmi.RemoteException;
  *  Will pass off actual movement and solving to Driver class
  */
 public class Main {
-
-    private LocalEV3 localEV3;
-    private RemoteEV3 remoteEV3;
     private OmniPilot pilot;
+    private MovePilot movePilot;
 
     private String address = "192.168.0.11";
 
@@ -73,69 +75,31 @@ public class Main {
 //            System.exit(1);
 //        }
 
-        // Sets up the pilot class
-        setupPilotClassWithoutGyro();
+        Driver driver = new Driver(setupNewPilotClass());
 
-        // Setup threads
-//        Thread driver = new Thread(new Driver(pilot, localEV3, remoteEV3));
-        Driver driver = new Driver(pilot, localEV3, remoteEV3);
-
-//        SensorThread sensorThread = new SensorThread(colorSensorDownLeft);
         Thread sensorThread = new Thread(new SensorThread(new EV3ColorSensor(SensorPort.S2), new EV3ColorSensor(SensorPort.S3)));
 
-
+        // Start execution
         Notifications.ready();
+
         sensorThread.start();
 
-        try {
-            driver.run();
-        } catch (InterruptedException e) {
-            System.out.printf("");
-        }
+        driver.start();
 
+
+        // Close components
         SensorThread.threadStop = true;
         Driver.stopThread = true;
     }
 
-    /**
-     * Sets up the Omnipilot class
-     */
-    private void setupPilotClass() {
-        // Builds the gyro object
-        HiTechnicGyro gyro = new HiTechnicGyro(SensorPort.S2);
-        SampleProvider spin = gyro.getMode(0);
-        GyroscopeAdapter myGyro = new GyroscopeAdapter(spin,200f);
+    private MovePilot setupNewPilotClass() {
+        Wheel wheel1 = WheeledChassis.modelHolonomicWheel(Motor.A, 48).polarPosition(0, 135).gearRatio(2);
+        Wheel wheel2 = WheeledChassis.modelHolonomicWheel(Motor.B, 48).polarPosition(120, 135).gearRatio(2);
+        Wheel wheel3 = WheeledChassis.modelHolonomicWheel(Motor.C, 48).polarPosition(240, 135).gearRatio(2);
+        Chassis chassis = new WheeledChassis(new Wheel[]{wheel1, wheel2, wheel3}, WheeledChassis.TYPE_HOLONOMIC);
 
-        // Parameters:
-        // wheelDistanceFromCenter - the wheel distance from center
-        // wheelDiameter - the wheel diameter
-        // centralMotor - the central motor
-        // CW120degMotor - the motor at 120 degrees clockwise from front
-        // CCW120degMotor - the motor at 120 degrees counter-clockwise from front
-        // centralWheelFrontal - if true, the central wheel frontal else it is facing back
-        // motorReverse - if motors are mounted reversed
-        // gyro - the gyroscope
-        pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower(), myGyro);
-
-        pilot.setSpeed((int) Motor.A.getMaxSpeed());
+        return movePilot = new MovePilot(chassis);
     }
 
-    /**
-     * Sets up the Omnipilot class
-     * Does not initiate gyroscope as part of the class
-     */
-    private void setupPilotClassWithoutGyro() {
-        // Parameters:
-        // wheelDistanceFromCenter - the wheel distance from center
-        // wheelDiameter - the wheel diameter
-        // centralMotor - the central motor
-        // CW120degMotor - the motor at 120 degrees clockwise from front
-        // CCW120degMotor - the motor at 120 degrees counter-clockwise from front
-        // centralWheelFrontal - if true, the central wheel frontal else it is facing back
-        // motorReverse - if motors are mounted reversed
-        // gyro - the gyroscope
-        pilot = new OmniPilot(wheelDistanceFromCenter, wheelDiameter, Motor.A, Motor.C, Motor.B, true, true, LocalEV3.get().getPower());
 
-        pilot.setSpeed((int) Motor.A.getMaxSpeed() / 300);
-    }
 }

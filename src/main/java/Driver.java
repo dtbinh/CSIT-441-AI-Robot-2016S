@@ -1,4 +1,5 @@
 import lejos.hardware.motor.Motor;
+import lejos.robotics.navigation.MovePilot;
 import threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
@@ -18,24 +19,19 @@ import java.util.TimerTask;
  * Created by michael on 3/16/16.
  */
 public class Driver {
-    OmniPilot pilot;
-    LocalEV3 localEV3;
+    MovePilot pilot;
     RemoteEV3 remoteEV3;
-
     private long reverseTime = 100;
     private int speed = 1;
-
-
     public static boolean stopThread = false;
 
-    public Driver(OmniPilot pilot) {
-        this.pilot = pilot;
-    }
 
-    public Driver(OmniPilot pilot, LocalEV3 localEV3, RemoteEV3 remoteEV3) {
+    /**
+     *
+     * @param pilot
+     */
+    Driver(MovePilot pilot) {
         this.pilot = pilot;
-        this.localEV3 = localEV3;
-        this.remoteEV3 = remoteEV3;
     }
 
     /**
@@ -43,14 +39,7 @@ public class Driver {
      * Begin with mapping the test boards
      *
      */
-//    public void start() {
-//        mapSmallBoard();
-//        testProxSensors();
-//    }
-
-
-
-    public void run() throws InterruptedException {
+    public void start() {
         mapSmallBoard();
     }
 
@@ -78,9 +67,9 @@ public class Driver {
         Notifications.notifyShutdown();
     }
 
-    private void mapSmallBoard() throws InterruptedException {
+    private void mapSmallBoard() {
         while (SensorThread.colorDownIDLeft != Color.BLACK && SensorThread.colorDownIDRight != Color.BLACK) {
-            pilot.moveStraight(speed, 0);
+            pilot.travel(5, true);
             while (SensorThread.colorDownIDLeft != Color.WHITE || SensorThread.colorDownIDRight != Color.WHITE) {
                 if (SensorThread.colorDownIDLeft != Color.WHITE) {
                     while (SensorThread.colorDownIDLeft != Color.WHITE) {
