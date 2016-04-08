@@ -79,13 +79,16 @@ public class Main {
 
         Thread sensorThread = new Thread(new SensorThread(new EV3ColorSensor(SensorPort.S2), new EV3ColorSensor(SensorPort.S3)));
 
+//        SensorThread sensorThread = new SensorThread(new EV3ColorSensor(SensorPort.S2), new EV3ColorSensor(SensorPort.S3));
         // Start execution
+
+        SensorThread.calibrate();
+
         Notifications.ready();
 
         sensorThread.start();
 
         driver.start();
-
 
         // Close components
         SensorThread.threadStop = true;
@@ -93,12 +96,13 @@ public class Main {
     }
 
     private MovePilot setupNewPilotClass() {
-        Wheel wheel1 = WheeledChassis.modelHolonomicWheel(Motor.A, 48).polarPosition(0, 135).gearRatio(2);
-        Wheel wheel2 = WheeledChassis.modelHolonomicWheel(Motor.B, 48).polarPosition(120, 135).gearRatio(2);
-        Wheel wheel3 = WheeledChassis.modelHolonomicWheel(Motor.C, 48).polarPosition(240, 135).gearRatio(2);
+        Wheel wheel1 = WheeledChassis.modelHolonomicWheel(Motor.A, wheelDiameter).polarPosition(0, wheelDistanceFromCenter).gearRatio(2);
+        Wheel wheel2 = WheeledChassis.modelHolonomicWheel(Motor.B, wheelDiameter).polarPosition(120, wheelDistanceFromCenter).gearRatio(2);
+        Wheel wheel3 = WheeledChassis.modelHolonomicWheel(Motor.C, wheelDiameter).polarPosition(240, wheelDistanceFromCenter).gearRatio(2);
         Chassis chassis = new WheeledChassis(new Wheel[]{wheel1, wheel2, wheel3}, WheeledChassis.TYPE_HOLONOMIC);
 
         return movePilot = new MovePilot(chassis);
+
     }
 
 

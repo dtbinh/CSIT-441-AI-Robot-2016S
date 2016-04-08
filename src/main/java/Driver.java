@@ -68,20 +68,20 @@ public class Driver {
     }
 
     private void mapSmallBoard() {
-        while (SensorThread.colorDownIDLeft != Color.BLACK && SensorThread.colorDownIDRight != Color.BLACK) {
-            pilot.travel(5, true);
-            while (SensorThread.colorDownIDLeft != Color.WHITE || SensorThread.colorDownIDRight != Color.WHITE) {
-                if (SensorThread.colorDownIDLeft != Color.WHITE) {
-                    while (SensorThread.colorDownIDLeft != Color.WHITE) {
-                        pilot.rotate(1, true);
-                    }
-                    pilot.stop();
-                } else if (SensorThread.colorDownIDRight != Color.WHITE) {
-                    while (SensorThread.colorDownIDRight != Color.WHITE) {
-                        pilot.rotate(-1, true);
-                    }
-                    pilot.stop();
-                }
+        pilot.setLinearSpeed(20);
+        pilot.setAngularSpeed(20);
+
+//        while (SensorThread.colorDownIDLeft >= .60 && SensorThread.colorDownIDRight >= .60) {
+        while (Button.ESCAPE.isUp()) {
+            if (SensorThread.colorDownIDLeft < (SensorThread.leftWhiteValue - .05) && SensorThread.colorDownIDRight < (SensorThread.rightWhiteValue - .05)) {
+                pilot.travel(-3, true);
+            } else if (SensorThread.colorDownIDLeft < (SensorThread.leftWhiteValue - .05)) {
+                pilot.rotate(10, true);
+                // Turn robot right
+            }  else if (SensorThread.colorDownIDRight < (SensorThread.rightWhiteValue - .05)) {
+                pilot.rotate(-10, true);
+            } else {
+                pilot.travel(2, true);
             }
         }
     }

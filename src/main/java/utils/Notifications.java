@@ -28,6 +28,9 @@ public class Notifications {
         LCD.clear();
         Button.LEDPattern(4);
         LCD.drawString("Ready", 0, 5);
+        Sound.setVolume(10);
+        Sound.playTone(700, 1000);
+        Sound.setVolume(2);
         Button.waitForAnyPress();
         LCD.clear();
         LCD.refresh();

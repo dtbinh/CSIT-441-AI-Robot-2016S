@@ -2,6 +2,7 @@ package threads;
 
 import lejos.hardware.Button;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.robotics.SampleProvider;
 
 /**
  * Created by michael on 4/4/2016.
@@ -14,8 +15,15 @@ public class SensorThread implements Runnable {
 
     public static boolean threadStop = false;
 
-    public static int colorDownIDLeft;
-    public static int colorDownIDRight;
+    public static float colorDownIDLeft;
+    public static float colorDownIDRight;
+    public static float leftRedValue;
+    public static float leftWhiteValue;
+    public static float rightRedValue;
+    public static float rightWhiteValue;
+    public static float leftColorDiff;
+    public static float rightColorDiff;
+
 
 
     public SensorThread(EV3ColorSensor colorSensorDownLeft, EV3ColorSensor colorSensorDownRight) {
@@ -23,16 +31,59 @@ public class SensorThread implements Runnable {
         SensorThread.colorSensorDownRight = colorSensorDownRight;
     }
 
+    public static void calibrate() {
+        // Calibrate 1
+        System.out.println("Place left color sensor on tape");
+        Button.waitForAnyPress();
+
+        SampleProvider providerLeft = colorSensorDownLeft.getRedMode();
+        float[] sampleLeft = new float[1];
+        providerLeft.fetchSample(sampleLeft, 0);
+        System.out.println("The left sensor reads: " + sampleLeft[0]);
+        leftRedValue = sampleLeft[0];
+
+        SampleProvider provider = colorSensorDownRight.getRedMode();
+        float[] sample = new float[1];
+        provider.fetchSample(sample, 0);
+        System.out.println("The right sensor reads: " + sample[0]);
+        rightWhiteValue = sample[0];
+
+        // Calibrate 2
+        System.out.println("Place right color sensor on tape");
+        Button.waitForAnyPress();
+
+        providerLeft = colorSensorDownLeft.getRedMode();
+        sampleLeft = new float[1];
+        providerLeft.fetchSample(sampleLeft, 0);
+        System.out.println("The left sensor reads: " + sampleLeft[0]);
+        leftWhiteValue = sampleLeft[0];
+
+        provider = colorSensorDownRight.getRedMode();
+        sample = new float[1];
+        provider.fetchSample(sample, 0);
+        System.out.println("The right sensor reads: " + sample[0]);
+        rightRedValue = sample[0];
+
+        leftColorDiff = leftWhiteValue - leftRedValue;
+        rightColorDiff = rightWhiteValue - rightRedValue;
+
+    }
+
     @Override
     public void run() {
         while (!Button.ESCAPE.isDown())
             if (statement) {
-                colorDownIDLeft = colorSensorDownLeft.getColorID();
+                SampleProvider provider = colorSensorDownLeft.getRedMode();
+                float[] sample = new float[1];
+                provider.fetchSample(sample, 0);
+                colorDownIDLeft = sample[0];
                 statement = false;
             } else {
-                colorDownIDRight = colorSensorDownRight.getColorID();
+                SampleProvider provider = colorSensorDownRight.getRedMode();
+                float[] sample = new float[1];
+                provider.fetchSample(sample, 0);
+                colorDownIDRight = sample[0];
                 statement = true;
             }
-
     }
 }
