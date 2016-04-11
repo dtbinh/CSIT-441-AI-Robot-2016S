@@ -5,7 +5,9 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.SampleProvider;
 
 /**
- * Created by michael on 4/4/2016.
+ * valMax & valMin = Wanted levels
+ * locMax & locMin = Scanned values
+ * (valMax - valMin)/(locMax - locMin)(v-max) + valMax
  */
 public class SensorThread implements Runnable {
     private static EV3ColorSensor colorSensorDownLeft;

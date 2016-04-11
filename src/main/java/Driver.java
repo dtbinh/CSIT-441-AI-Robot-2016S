@@ -73,13 +73,13 @@ public class Driver {
 
 //        while (SensorThread.colorDownIDLeft >= .60 && SensorThread.colorDownIDRight >= .60) {
         while (Button.ESCAPE.isUp()) {
-            if (SensorThread.colorDownIDLeft < (SensorThread.leftWhiteValue - .05) && SensorThread.colorDownIDRight < (SensorThread.rightWhiteValue - .05)) {
-                pilot.travel(-3, true);
-            } else if (SensorThread.colorDownIDLeft < (SensorThread.leftWhiteValue - .05)) {
-                pilot.rotate(10, true);
+            if (SensorThread.colorDownIDLeft < (SensorThread.leftWhiteValue - .05)) {
+                // Arc left
+                pilot.travelArc(100, 3, true);
                 // Turn robot right
             }  else if (SensorThread.colorDownIDRight < (SensorThread.rightWhiteValue - .05)) {
-                pilot.rotate(-10, true);
+                // Arc right
+                pilot.travelArc(-100, 3, true);
             } else {
                 pilot.travel(2, true);
             }
