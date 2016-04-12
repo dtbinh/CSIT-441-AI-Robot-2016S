@@ -36,7 +36,7 @@ public class Driver {
 
     public void calibrateSensors() {
         SensorThread.calibrateBothRed();
-        pilot.rotate(170);
+        pilot.rotate(160);
         SensorThread.calibrateBothWhite();
     }
 
@@ -68,18 +68,19 @@ public class Driver {
         pilot.setLinearSpeed(20);
         pilot.setAngularSpeed(20);
 
+        Button.waitForAnyPress();
         System.out.println("Left exp: " + SensorThread.expandSensorLeft());
         System.out.println("Right exp: " + SensorThread.expandSensorRight());
 
 //        while (Button.ESCAPE.isUp()) {
 //            // Hard turn left check
-////            if (SensorThread.expandSensor(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) < 25) {
+////            if (SensorThread.expandRange(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) < 25) {
 ////                pilot.rotate(30);
-////            }  else if (SensorThread.expandSensor(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) < 25) {
+////            }  else if (SensorThread.expandRange(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) < 25) {
 ////                pilot.rotate(-30);
 ////            } else
-////            if (SensorThread.expandSensor(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) > 25 &&
-////                    SensorThread.expandSensor(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) > 25) {
+////            if (SensorThread.expandRange(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) > 25 &&
+////                    SensorThread.expandRange(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) > 25) {
 ////                pilot.travel(20);
 ////            } else {
 ////                pilot.stop();

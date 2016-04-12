@@ -73,7 +73,6 @@ public class Main {
 
         driver.calibrateSensors();
 
-
         sensorThread.start();
 
         driver.mapSmallBoard();
