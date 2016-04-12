@@ -138,10 +138,18 @@ public class SensorThread implements Runnable {
     public void run() {
         while (Button.ESCAPE.isUp()) {
             if (statement) {
-                colorDownIDLeft = getLeftRedMode();
+                float result = getLeftRedMode();
+                colorDownIDLeft = result;
+                if (result > leftWhiteValue) {
+                    leftWhiteValue = result;
+                }
                 statement = false;
             } else {
-                colorDownIDRight = getRightRedMode();
+                float result = getRightRedMode();
+                colorDownIDRight = result;
+                if (result > rightWhiteValue) {
+                    rightWhiteValue = result;
+                }
                 statement = true;
             }
         }
