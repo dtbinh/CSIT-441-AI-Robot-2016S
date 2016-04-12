@@ -1,24 +1,14 @@
-import lejos.robotics.Color;
+import lejos.hardware.Button;
 import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
 import threads.SensorThread;
-import lejos.hardware.Button;
-import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.HiTechnicGyro;
-import lejos.remote.ev3.RemoteEV3;
-import lejos.robotics.GyroscopeAdapter;
-import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.OmniPilot;
 import utils.Notifications;
-
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 
 /**
  * Brick 1:
@@ -45,15 +35,14 @@ import java.rmi.RemoteException;
  *  Will pass off actual movement and solving to Driver class
  */
 public class Main {
-    private OmniPilot pilot;
-    private MovePilot movePilot;
-
     private String address = "192.168.0.11";
 
     // wheelDistanceFromCenter - the wheel distance from center
     private float wheelDistanceFromCenter = 4.75f;
     // wheelDiameter - the wheel diameter
     private float wheelDiameter = 1.875f;
+
+    private Chassis chassis;
 
     /**
      *
@@ -79,30 +68,25 @@ public class Main {
 
         Thread sensorThread = new Thread(new SensorThread(new EV3ColorSensor(SensorPort.S2), new EV3ColorSensor(SensorPort.S3)));
 
-//        SensorThread sensorThread = new SensorThread(new EV3ColorSensor(SensorPort.S2), new EV3ColorSensor(SensorPort.S3));
-        // Start execution
-
-        SensorThread.calibrate();
 
         Notifications.ready();
+
+        driver.calibrateSensors();
 
         sensorThread.start();
 
         driver.start();
 
-        // Close components
-        SensorThread.threadStop = true;
-        Driver.stopThread = true;
+        System.exit(0);
     }
 
     private MovePilot setupNewPilotClass() {
         Wheel wheel1 = WheeledChassis.modelHolonomicWheel(Motor.A, wheelDiameter).polarPosition(0, wheelDistanceFromCenter).gearRatio(2);
         Wheel wheel2 = WheeledChassis.modelHolonomicWheel(Motor.B, wheelDiameter).polarPosition(120, wheelDistanceFromCenter).gearRatio(2);
         Wheel wheel3 = WheeledChassis.modelHolonomicWheel(Motor.C, wheelDiameter).polarPosition(240, wheelDistanceFromCenter).gearRatio(2);
-        Chassis chassis = new WheeledChassis(new Wheel[]{wheel1, wheel2, wheel3}, WheeledChassis.TYPE_HOLONOMIC);
+        chassis = new WheeledChassis(new Wheel[]{wheel1, wheel2, wheel3}, WheeledChassis.TYPE_HOLONOMIC);
 
-        return movePilot = new MovePilot(chassis);
-
+        return new MovePilot(chassis);
     }
 
 

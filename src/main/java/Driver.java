@@ -1,5 +1,6 @@
 import lejos.hardware.motor.Motor;
 import lejos.robotics.navigation.MovePilot;
+import sun.management.Sensor;
 import threads.SensorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
@@ -19,10 +20,9 @@ import java.util.TimerTask;
  * Created by michael on 3/16/16.
  */
 public class Driver {
-    MovePilot pilot;
-    RemoteEV3 remoteEV3;
-    private long reverseTime = 100;
-    private int speed = 1;
+    private MovePilot pilot;
+    private RemoteEV3 remoteEV3;
+
     public static boolean stopThread = false;
 
 
@@ -40,7 +40,13 @@ public class Driver {
      *
      */
     public void start() {
-        mapSmallBoard();
+
+    }
+
+    public void calibrateSensors() {
+        SensorThread.calibrateBothRed();
+        pilot.rotate(170);
+        SensorThread.calibrateBothWhite();
     }
 
     public void setThreadStop() {

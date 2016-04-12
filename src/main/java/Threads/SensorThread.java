@@ -62,6 +62,22 @@ public class SensorThread implements Runnable {
         rightRedValue = getRightRedMode();
     }
 
+    public static void calibrateBothRed() {
+        System.out.println("The left sensor reads: " + getLeftRedMode());
+        leftRedValue = getLeftRedMode();
+
+        System.out.println("The right sensor reads: " + getRightRedMode());
+        rightRedValue = getRightRedMode();
+    }
+
+    public static void calibrateBothWhite() {
+        System.out.println("The left sensor reads: " + getLeftRedMode());
+        leftWhiteValue = getLeftRedMode();
+
+        System.out.println("The right sensor reads: " + getRightRedMode());
+        leftWhiteValue = getRightRedMode();
+    }
+
     public static float getLeftRedMode() {
         SampleProvider providerLeft = colorSensorDownLeft.getRedMode();
         float[] sampleLeft = new float[1];
