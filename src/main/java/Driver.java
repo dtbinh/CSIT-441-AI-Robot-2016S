@@ -65,26 +65,26 @@ public class Driver {
     }
 
     public void mapSmallBoard() {
-        pilot.setLinearSpeed(20);
+        pilot.setLinearSpeed(10);
         pilot.setAngularSpeed(20);
 
-        Button.waitForAnyPress();
-        System.out.println("Left exp: " + SensorThread.expandSensorLeft());
-        System.out.println("Right exp: " + SensorThread.expandSensorRight());
 
-//        while (Button.ESCAPE.isUp()) {
-//            // Hard turn left check
-////            if (SensorThread.expandRange(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) < 25) {
-////                pilot.rotate(30);
-////            }  else if (SensorThread.expandRange(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) < 25) {
-////                pilot.rotate(-30);
-////            } else
-////            if (SensorThread.expandRange(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) > 25 &&
-////                    SensorThread.expandRange(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) > 25) {
-////                pilot.travel(20);
-////            } else {
-////                pilot.stop();
-////            }
-//        }
+
+        while (Button.ESCAPE.isUp()) {
+//             Hard turn left check
+            if (SensorThread.expandSensorLeft() < -50 ||
+                    SensorThread.expandSensorRight() < -50) {
+                pilot.stop();
+            } else if (SensorThread.expandSensorLeft() < 25) {
+                pilot.rotate(30);
+            }  else if (SensorThread.expandSensorRight() < 25) {
+                pilot.rotate(-30);
+            } else if (SensorThread.expandSensorLeft() >= 25 &&
+                    SensorThread.expandSensorRight() >= 25) {
+                pilot.travel(1);
+            } else {
+                pilot.stop();
+            }
+        }
     }
 }
