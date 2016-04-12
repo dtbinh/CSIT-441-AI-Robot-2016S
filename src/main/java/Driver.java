@@ -34,15 +34,6 @@ public class Driver {
         this.pilot = pilot;
     }
 
-    /**
-     * Starts the solving function
-     * Begin with mapping the test boards
-     *
-     */
-    public void start() {
-
-    }
-
     public void calibrateSensors() {
         SensorThread.calibrateBothRed();
         pilot.rotate(170);
@@ -73,35 +64,26 @@ public class Driver {
         Notifications.notifyShutdown();
     }
 
-    private void mapSmallBoard() {
+    public void mapSmallBoard() {
         pilot.setLinearSpeed(20);
         pilot.setAngularSpeed(20);
 
-//        while (SensorThread.colorDownIDLeft >= .60 && SensorThread.colorDownIDRight >= .60) {
-        while (Button.ESCAPE.isUp()) {
-            if (SensorThread.colorDownIDLeft < (SensorThread.leftWhiteValue - .05)) {
-                // Arc left
-                pilot.travelArc(100, 3, true);
-                // Turn robot right
-            }  else if (SensorThread.colorDownIDRight < (SensorThread.rightWhiteValue - .05)) {
-                // Arc right
-                pilot.travelArc(-100, 3, true);
-            } else {
-                pilot.travel(2, true);
-            }
-        }
-    }
+        System.out.println("Left exp: " + SensorThread.expandSensorLeft());
+        System.out.println("Right exp: " + SensorThread.expandSensorRight());
 
-    private void testProxSensors() {
-        EV3UltrasonicSensor sensor = new EV3UltrasonicSensor(SensorPort.S1);
-        EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S4);
-
-        Button.LEDPattern(4);
-
-        while (colorSensor.getColorID() == Color.RED) {
-            Button.waitForAnyPress();
-            LCD.drawString(sensor.getDistanceMode().sampleSize() + "", 0, 5);
-            LCD.refresh();
-        }
+//        while (Button.ESCAPE.isUp()) {
+//            // Hard turn left check
+////            if (SensorThread.expandSensor(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) < 25) {
+////                pilot.rotate(30);
+////            }  else if (SensorThread.expandSensor(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) < 25) {
+////                pilot.rotate(-30);
+////            } else
+////            if (SensorThread.expandSensor(SensorThread.getLeftRedMode(), SensorThread.leftWhiteValue, SensorThread.rightRedValue) > 25 &&
+////                    SensorThread.expandSensor(SensorThread.getRightRedMode(), SensorThread.rightWhiteValue, SensorThread.getRightRedMode()) > 25) {
+////                pilot.travel(20);
+////            } else {
+////                pilot.stop();
+////            }
+//        }
     }
 }

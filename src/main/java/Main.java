@@ -73,9 +73,12 @@ public class Main {
 
         driver.calibrateSensors();
 
+
         sensorThread.start();
 
-        driver.start();
+        driver.mapSmallBoard();
+
+        Button.waitForAnyPress();
 
         System.exit(0);
     }
