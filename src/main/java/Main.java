@@ -77,13 +77,11 @@ public class Main {
 
         driver.mapSmallBoard();
 
-        Button.waitForAnyPress();
+        Notifications.ready();
 
         driver.moveOnLargeBoard();
 
         Button.waitForAnyPress();
-
-        Notifications.ready();
 
         System.exit(0);
     }

@@ -11,15 +11,20 @@ public class PathRecorder {
     private BufferedWriter bufferedWriter;
 
     public PathRecorder() {
+
+    }
+
+    public void initFile() {
+        // if file doesnt exists, then create it
         try {
-            //         if file doesnt exists, then create it
             if (!file.exists()) {
                 file.createNewFile();
             }
+
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             bufferedWriter = new BufferedWriter(fw);
         } catch (IOException e) {
-
+            System.out.printf("Meh");
         }
     }
 
@@ -35,8 +40,12 @@ public class PathRecorder {
 
     public ArrayList<String> readDirectionFile() {
         ArrayList<String> list = new ArrayList<>();
+        String line;
+        System.out.println("I am here");
         try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsoluteFile()))) {
-            list.add(reader.readLine());
+            line = reader.readLine();
+            System.out.println(line);
+            list.add(line);
         } catch (IOException e) {
             System.out.printf("No");
         }

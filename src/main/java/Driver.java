@@ -62,6 +62,7 @@ public class Driver {
         pilot.setAngularSpeed(20);
 
         PathRecorder recorder = new PathRecorder();
+        recorder.initFile();
 
         while (!(SensorThread.expandSensorLeft() < -50 ||
                 SensorThread.expandSensorRight() < -50)) {
