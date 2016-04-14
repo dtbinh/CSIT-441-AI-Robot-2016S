@@ -1,3 +1,4 @@
+import lejos.hardware.Sound;
 import lejos.hardware.motor.Motor;
 import lejos.robotics.navigation.MovePilot;
 import sun.management.Sensor;
@@ -84,6 +85,7 @@ public class Driver {
                 pilot.travel(1);
             } else {
                 pilot.stop();
+                Sound.beepSequence();
             }
         }
     }
