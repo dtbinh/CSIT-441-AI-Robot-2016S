@@ -1,41 +1,49 @@
 package utils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Created by michael on 4/12/16.
  */
 public class PathRecorder {
-    File file = new File("/home/lejos/path.txt");
-    private static BufferedWriter bufferedWriter;
+    private File file = new File("/home/lejos/path.txt");
+    private BufferedWriter bufferedWriter;
 
     public PathRecorder() {
         try {
+            //         if file doesnt exists, then create it
             if (!file.exists()) {
                 file.createNewFile();
             }
-
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
-
             bufferedWriter = new BufferedWriter(fw);
-
         } catch (IOException e) {
-            System.out.println("NO");
+
         }
     }
 
-    public static void writeDirection(String direction) {
+    public void writeDirection(String direction) {
         try {
-            bufferedWriter.write(direction + "\n");
-        }catch (IOException e) {
-            System.out.printf("NO");
+            String content = direction + "\n";
+            bufferedWriter.flush();
+            bufferedWriter.append(content);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void closeReader() {
+    public ArrayList<String> readDirectionFile() {
+        ArrayList<String> list = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsoluteFile()))) {
+            list.add(reader.readLine());
+        } catch (IOException e) {
+            System.out.printf("No");
+        }
+        return list;
+    }
+
+    public void closeWriter() {
         try {
             bufferedWriter.close();
         } catch (IOException e) {

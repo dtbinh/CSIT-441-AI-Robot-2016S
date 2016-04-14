@@ -79,6 +79,12 @@ public class Main {
 
         Button.waitForAnyPress();
 
+        driver.moveOnLargeBoard();
+
+        Button.waitForAnyPress();
+
+        Notifications.ready();
+
         System.exit(0);
     }
 

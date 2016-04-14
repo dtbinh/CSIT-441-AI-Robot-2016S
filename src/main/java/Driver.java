@@ -1,18 +1,10 @@
 import lejos.hardware.Sound;
-import lejos.hardware.motor.Motor;
 import lejos.robotics.navigation.MovePilot;
-import sun.management.Sensor;
 import threads.SensorThread;
 import lejos.hardware.Button;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.LCD;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RemoteEV3;
-import lejos.robotics.Color;
-import lejos.robotics.navigation.OmniPilot;
 import utils.Notifications;
+import utils.PathRecorder;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,24 +61,61 @@ public class Driver {
         pilot.setLinearSpeed(10);
         pilot.setAngularSpeed(20);
 
+        PathRecorder recorder = new PathRecorder();
 
-
-        while (Button.ESCAPE.isUp()) {
+        while (!(SensorThread.expandSensorLeft() < -50 ||
+                SensorThread.expandSensorRight() < -50)) {
 //             Hard turn left check
             if (SensorThread.expandSensorLeft() < -50 ||
                     SensorThread.expandSensorRight() < -50) {
+                recorder.writeDirection("stop");
                 pilot.stop();
+                Sound.beepSequence();
             } else if (SensorThread.expandSensorLeft() < 25) {
+                recorder.writeDirection("left");
                 pilot.rotate(30);
             }  else if (SensorThread.expandSensorRight() < 25) {
+                recorder.writeDirection("right");
                 pilot.rotate(-30);
             } else if (SensorThread.expandSensorLeft() >= 25 &&
                     SensorThread.expandSensorRight() >= 25) {
+                recorder.writeDirection("forward");
                 pilot.travel(1);
             } else {
+                recorder.writeDirection("stop");
                 pilot.stop();
                 Sound.beepSequence();
             }
         }
+
+        recorder.closeWriter();
+    }
+
+    public void moveOnLargeBoard() {
+        pilot.setLinearSpeed(10);
+        pilot.setAngularSpeed(20);
+
+        PathRecorder recorder = new PathRecorder();
+        for (String direction : recorder.readDirectionFile())
+        switch (direction) {
+            case "stop": {
+                pilot.stop();
+                break;
+            }
+
+            case "left": {
+                pilot.rotate(30);
+                break;
+            }
+
+            case "right": {
+                pilot.rotate(-30);
+            }
+
+            case "forward": {
+                pilot.travel(4);
+            }
+        }
+
     }
 }
