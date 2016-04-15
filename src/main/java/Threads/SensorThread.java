@@ -105,6 +105,22 @@ public class SensorThread implements Runnable {
 
     /**
      *
+     * @return
+     */
+    public static void setInitialLeftRed() {
+        leftRedValue = getLeftRedMode();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static void setInitialRightRed() {
+        rightRedValue = getRightRedMode();
+    }
+
+    /**
+     *
      * @param input
      * @param localMin
      * @param localMax

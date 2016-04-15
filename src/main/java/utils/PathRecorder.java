@@ -41,11 +41,12 @@ public class PathRecorder {
     public ArrayList<String> readDirectionFile() {
         ArrayList<String> list = new ArrayList<>();
         String line;
-        System.out.println("I am here");
         try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsoluteFile()))) {
             line = reader.readLine();
-            System.out.println(line);
-            list.add(line);
+            do {
+                list.add(line);
+                line = reader.readLine();
+            } while (line != null);
         } catch (IOException e) {
             System.out.printf("No");
         }

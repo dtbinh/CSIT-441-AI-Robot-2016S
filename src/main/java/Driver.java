@@ -6,6 +6,7 @@ import lejos.remote.ev3.RemoteEV3;
 import utils.Notifications;
 import utils.PathRecorder;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +19,11 @@ public class Driver {
 
     public static boolean stopThread = false;
 
+    private String stop = "stop";
+    private String forward = "forward";
+    private String left = "left";
+    private String right = "right";
+
 
     /**
      *
@@ -28,8 +34,8 @@ public class Driver {
     }
 
     public void calibrateSensors() {
-        SensorThread.calibrateBothRed();
-        pilot.rotate(160);
+        //SensorThread.calibrateBothRed();
+        //pilot.rotate(160);
         SensorThread.calibrateBothWhite();
     }
 
@@ -61,29 +67,53 @@ public class Driver {
         pilot.setLinearSpeed(10);
         pilot.setAngularSpeed(20);
 
+        boolean initialRedLeft = true;
+        boolean initialRedRight = true;
+
         PathRecorder recorder = new PathRecorder();
         recorder.initFile();
 
         while (!(SensorThread.expandSensorLeft() < -50 ||
                 SensorThread.expandSensorRight() < -50)) {
+            System.out.println("Left Sensor" + SensorThread.expandSensorLeft());
+            System.out.println("Right Sensor" + SensorThread.expandSensorRight());
 //             Hard turn left check
             if (SensorThread.expandSensorLeft() < -50 ||
                     SensorThread.expandSensorRight() < -50) {
-                recorder.writeDirection("stop");
+                recorder.writeDirection(stop);
                 pilot.stop();
                 Sound.beepSequence();
+            } else if (SensorThread.expandSensorLeft() < 0) {
+                if (initialRedLeft) {
+                    SensorThread.setInitialLeftRed();
+                    initialRedLeft = false;
+                }
+            } else if (SensorThread.expandSensorRight() < 0) {
+                if (initialRedRight) {
+                    SensorThread.setInitialRightRed();
+                    initialRedRight = false;
+                }
             } else if (SensorThread.expandSensorLeft() < 25) {
-                recorder.writeDirection("left");
-                pilot.rotate(30);
+                if (initialRedLeft) {
+                    SensorThread.setInitialLeftRed();
+                    initialRedLeft = false;
+                } else {
+                    recorder.writeDirection(left);
+                    pilot.rotate(30);
+                }
             }  else if (SensorThread.expandSensorRight() < 25) {
-                recorder.writeDirection("right");
-                pilot.rotate(-30);
-            } else if (SensorThread.expandSensorLeft() >= 25 &&
-                    SensorThread.expandSensorRight() >= 25) {
-                recorder.writeDirection("forward");
+                if (initialRedRight) {
+                    SensorThread.setInitialRightRed();
+                    initialRedRight = false;
+                } else {
+                    recorder.writeDirection(right);
+                    pilot.rotate(-30);
+                }
+            } else if (SensorThread.expandSensorLeft() >= 25 && SensorThread.expandSensorRight() >= 25) {
+                recorder.writeDirection(forward);
                 pilot.travel(1);
             } else {
-                recorder.writeDirection("stop");
+                recorder.writeDirection(stop);
                 pilot.stop();
                 Sound.beepSequence();
             }
@@ -97,26 +127,32 @@ public class Driver {
         pilot.setAngularSpeed(20);
 
         PathRecorder recorder = new PathRecorder();
-        for (String direction : recorder.readDirectionFile())
-        switch (direction) {
-            case "stop": {
-                pilot.stop();
-                break;
+        ArrayList<String> list = recorder.readDirectionFile();
+
+        for (int x = 0; x < list.size(); x++) {
+            switch (list.get(x)) {
+                case "stop": {
+                    pilot.stop();
+                    break;
+                }
+
+                case "left": {
+                    pilot.rotate(30);
+                    break;
+                }
+
+                case "right": {
+                    pilot.rotate(-30);
+                }
+
+                case "forward": {
+                    pilot.travel(4);
+                }
+                default: {
+                    System.out.println("I didn't have a command");
+                }
             }
 
-            case "left": {
-                pilot.rotate(30);
-                break;
-            }
-
-            case "right": {
-                pilot.rotate(-30);
-            }
-
-            case "forward": {
-                pilot.travel(4);
-            }
         }
-
     }
 }
