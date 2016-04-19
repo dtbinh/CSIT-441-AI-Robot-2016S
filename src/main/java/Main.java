@@ -79,7 +79,9 @@ public class Main {
 
         Notifications.ready();
 
-        driver.moveOnLargeBoard();
+        dropNet();
+
+        driver.moveOnLargeBoard2();
 
         Button.waitForAnyPress();
 
@@ -93,6 +95,16 @@ public class Main {
         chassis = new WheeledChassis(new Wheel[]{wheel1, wheel2, wheel3}, WheeledChassis.TYPE_HOLONOMIC);
 
         return new MovePilot(chassis);
+    }
+
+    private void dropNet() {
+        try {
+            Motor.D.forward();
+            Thread.sleep(2000);
+            Motor.D.stop();
+        } catch (InterruptedException ex) {
+
+        }
     }
 
 
